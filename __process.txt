@@ -1,0 +1,7 @@
+smart contract will upload, store, and list videos
+
+when we upload video, we upload directly to IPFS
+    IPFS returns a hash (id/location of video)
+    store hash on SC whenever we upload a video
+        stored on blockchain
+    can access all videos when we list them all

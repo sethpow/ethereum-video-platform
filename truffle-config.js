@@ -1,3 +1,5 @@
+// configure truffle project to connect to blockchain
+
 require('babel-register');
 require('babel-polyfill');
 require('dotenv').config();
