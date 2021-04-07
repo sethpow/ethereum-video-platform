@@ -15,6 +15,7 @@ class Main extends Component {
               {/* loading newest video */}
               <video
                 src={`https://ipfs.infura.io/ipfs/${this.props.currentHash}`}
+                controls
               />
 
             </div>
@@ -35,7 +36,8 @@ class Main extends Component {
               
               <input
                 type='file'
-                accept='.mp4 .mkv .ogg .wmv'
+                accept="video/mp4,video/x-m4v,video/*"
+                // accept='.mp4 .mkv .ogg .wmv .mov'
                 onChange={this.props.captureFile}
                 style={{ width: '250px' }}
               />
@@ -57,7 +59,7 @@ class Main extends Component {
             {/* List videos on side */}
             {this.props.videos.map((video, key) => {
               return (
-                <div className='card mb-4 text-center bg-secondary mx-auto' style={{width: '175px'}}>
+                <div className='card mb-4 text-center bg-secondary mx-auto' style={{width: '175px'}} key={key}>
                   <div className='card-title bg-dark'>
                     <small className='text-white'><b>{video.title}</b></small>
                   </div>
