@@ -80,17 +80,49 @@ class App extends Component {
 
   //Get video
   captureFile = event => {
+    // convert file to a buffer object; get ready to be processed on IPFS
+    event.preventDefault()
 
+    // capture file
+    const file = event.target.files[0]
+
+    // convert file to a buffer
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+
+    // add video to state
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result) })
+      console.log('buffer', this.state.buffer);
+    }
   }
 
   //Upload video
   uploadVideo = title => {
+    // Add file to IPFS
+      // 1st, need a connection to IPFS; line 10
 
+    // add to IPFS, get hash back to add to blockchain
+    ipfs.add(this.state.buffer, (error, result) => {   // formatted file(in capture file), callback
+      if(error){
+        console.error(error);
+        return;
+      }
+
+      // save hash to SC
+      this.setState({ loading: true })// pass in IPFS hash and title;      who is sending the call
+      this.state.dvideo.methods.uploadVideo(result[0].hash, title).send({ from: this.state.account }).on('transactionHash', () => {
+        // after tx hash has come back, set loading to false
+        this.setState({ loading: false })
+      })
+    })
   }
 
   //Change Video
   changeVideo = (hash, title) => {
-
+    // set the state to the current video when we click on it
+    this.setState({ 'currentHash': hash })
+    this.setState({ 'currentTitle': title })
   }
 
   constructor(props) {
@@ -107,6 +139,9 @@ class App extends Component {
     }
 
     //Bind functions
+    this.uploadVideo = this.uploadVideo.bind(this)
+    this.captureFile = this.captureFile.bind(this)
+    this.changeVideo = this.changeVideo.bind(this)
   }
 
   render() {
@@ -119,7 +154,12 @@ class App extends Component {
         { this.state.loading
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
           : <Main
-              //states&functions
+              videos={this.state.videos}
+              captureFile={this.captureFile}
+              uploadVideo={this.uploadVideo}
+              changeVideo={this.changeVideo}
+              currentHash={this.state.currentHash}
+              currentTitle={this.state.currentTitle}
             />
         }
       </div>
