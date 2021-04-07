@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 // governs application; upload videos, and store on IPFS
 /*
 	1. Model video
-	2. Store video
+	2. Allow for storing of video
 	3. Upload video
 	4. List (all) video(s)
 */
